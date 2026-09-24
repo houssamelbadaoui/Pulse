@@ -7,11 +7,29 @@ const container = document.querySelector(".container");
 const tasks = [];
 
 
+button.addEventListener("click", (e) => {
+  e.preventDefault()
+  // take values from input
+  const title = document.getElementById("title").value;
+  const category = document.getElementById("category").value;
+  const priority = document.getElementById("priority").value;
+  const duration = document.getElementById("duration").value;
+
+  const task = new Task(title, category, priority, duration); // create a new task
+  tasks.push(task);
+  console.log(tasks)
+  updateUI();
+
+  
+  document.getElementById("form").reset();
+  
+})
 // function that update the UI
 function updateUI(){
+  let card;
   tasks.forEach(task => {
     // create a div 
-    const card = document.createElement("div");
+     card = document.createElement("div");
 
     card.innerHTML = `
     <h3 class="task-header">${task.title}</h3>
@@ -24,9 +42,12 @@ function updateUI(){
     </div>
     `
 
-    container.appendChild(card);
+    
+
   })
-}
+  container.appendChild(card);
+  }
+  
 // create a class for task
 class Task {
   constructor(title, category, priority, duration) {
