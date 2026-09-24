@@ -3,7 +3,31 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Pulse</title>
   </head>
-  <body></body>
+  <body>
+    <form>
+      <div class="form-group">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" />
+      </div>
+      <div class="form-group">
+        <label for="category">Category:</label>
+        <input type="text" id="category" name="category" />
+      </div>
+      <div class="form-group">
+        <label for="priority">Priority:</label>
+        <select id="priority" name="priority">
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="duration">Duration:</label>
+        <input type="number" id="duration" name="duration" />
+      </div>
+      <button type="submit">Submit</button>
+    </form>
+  </body>
 </html>
