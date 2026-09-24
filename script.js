@@ -4,11 +4,10 @@ const button = document.querySelector(".submit");
 const container = document.querySelector(".container");
 
 // array for tasks
-const tasks = [];
-
+let tasks = [];
 
 button.addEventListener("click", (e) => {
-  e.preventDefault()
+  e.preventDefault();
   // take values from input
   const title = document.getElementById("title").value;
   const category = document.getElementById("category").value;
@@ -17,19 +16,22 @@ button.addEventListener("click", (e) => {
 
   const task = new Task(title, category, priority, duration); // create a new task
   tasks.push(task);
-  console.log(tasks)
+
   updateUI();
 
-  
   document.getElementById("form").reset();
-  
-})
+});
 // function that update the UI
-function updateUI(){
+function updateUI() {
+  sortTasks(tasks);
+  container.innerHTML = "";
   let card;
-  tasks.forEach(task => {
-    // create a div 
-     card = document.createElement("div");
+  tasks.forEach((task) => {
+    // create a div
+    card = document.createElement("div");
+
+    card.classList.add("task-card"); // give it a class
+    card.dataset.id = task.id;
 
     card.innerHTML = `
     <h3 class="task-header">${task.title}</h3>
@@ -37,17 +39,34 @@ function updateUI(){
     <p class="priority">${task.priority}</p>
     <p class="duration">${task.duration}</p>
     <div class="check-group">
-    <input type="checkbox" id="${task.id}" name="completed" value="comleted">
-    <label for="${task.id} > Completed </label>
+    <input type="checkbox" id="completed" name="completed" value="comleted">
+    <label for="completed" > Completed </label>
     </div>
-    `
+    `;
+    container.appendChild(card);
+  });
+}
 
-    
+// function to sort the list of tasks
+function sortTasks(tasks) {
+  const priorityOrder = {
+    high: 1,
+    medium: 2,
+    low: 3,
+  };
 
-  })
-  container.appendChild(card);
-  }
-  
+  return tasks.sort((a, b) => {
+    return priorityOrder[a.priority] - priorityOrder[b.priority];
+  });
+}
+// mark a task as completed
+container.addEventListener("change", (e) => {
+  const taskId = e.target.closest(".task-card").dataset.id; // get task id
+
+  const task = tasks.find((t) => t.id == taskId); // task
+
+  task.completed = e.target.checked;
+});
 // create a class for task
 class Task {
   constructor(title, category, priority, duration) {
@@ -57,10 +76,5 @@ class Task {
     this.priority = priority;
     this.duration = duration;
     this.completed = false;
-  }
-
-  // complete a task
-  complete() {
-    this.completed = true;
   }
 }
