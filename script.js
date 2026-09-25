@@ -150,3 +150,10 @@ function loadTasks(name){
   }
   
 }
+
+// onClick button to scrool to tasks section
+function scrollToSection(){
+  const section = document.getElementById("task-section");
+
+  section.scrollIntoView({behavior: "smooth"});
+}
