@@ -1,16 +1,14 @@
-
-// select button
-const button = document.querySelector(".submit");
+// select form
+const form = document.querySelector("#form");
 // select tasks container
 const container = document.querySelector(".task-container");
-// completed tasks container 
+// completed tasks container
 const completedContainer = document.querySelector(".completed-container");
 
 // array for tasks
 let tasks = [];
 
-
-// load tasks 
+// load tasks
 tasks = loadTasks("tasks");
 updateUI(tasks, container);
 
@@ -20,9 +18,9 @@ let completedTasks = [];
 completedTasks = loadTasks("completed");
 updateUI(completedTasks, completedContainer);
 
-button.addEventListener("click", (e) => {
+form.addEventListener("submit", (e) => {
   e.preventDefault();
-  
+
   // take values from input
   const title = document.getElementById("title").value;
   const category = document.getElementById("category").value;
@@ -31,14 +29,12 @@ button.addEventListener("click", (e) => {
 
   const task = new Task(title, category, priority, duration); // create a new task
   tasks.push(task);
-saveTasks("tasks", tasks);
-  
+  saveTasks("tasks", tasks);
 
   updateUI(tasks, container);
 
   document.getElementById("form").reset();
 });
-
 
 // function to sort the list of tasks
 function sortTasks(tasks) {
@@ -60,49 +56,44 @@ container.addEventListener("change", (e) => {
 
   task.completed = true;
 
-  tasks =  tasks.filter(task => task.id !== taskId); // remove the completed task
+  tasks = tasks.filter((task) => task.id !== taskId); // remove the completed task
   saveTasks("tasks", tasks);
   updateUI(tasks, container); // print tasks
 
-  completedTasks.push(task) // add to the container of completed tasks 
+  completedTasks.push(task); // add to the container of completed tasks
   saveTasks("completed", completedTasks);
 
-
- insertToContainer(completedTasks, completedContainer);
- 
+  insertToContainer(completedTasks, completedContainer);
 });
 
-// uncheck a completed task 
+// uncheck a completed task
 completedContainer.addEventListener("change", (e) => {
   const taskId = Number(e.target.closest(".task-card").dataset.id);
 
-  const task = completedTasks.find(t => t.id === taskId);
+  const task = completedTasks.find((t) => t.id === taskId);
 
   task.completed = false;
 
-  completedTasks = completedTasks.filter(task => task.id !== taskId);
+  completedTasks = completedTasks.filter((task) => task.id !== taskId);
   updateUI(completedTasks, completedContainer);
   saveTasks("completed", completedTasks);
-
 
   tasks.push(task);
   saveTasks("tasks", tasks);
   updateUI(tasks, container);
-
-})
+});
 
 // function that update the UI
 function updateUI(tasks, container) {
   sortTasks(tasks);
   insertToContainer(tasks, container);
-  
 }
 /**
- * function that take a list of tasks and a container 
+ * function that take a list of tasks and a container
  * and insert each task to the container
  */
-function insertToContainer(tasks, container){
-container.innerHTML = "";
+function insertToContainer(tasks, container) {
+  container.innerHTML = "";
   let card;
   tasks.forEach((task) => {
     // create a div
@@ -136,24 +127,22 @@ class Task {
   }
 }
 
-// using localStorage to store tasks 
-function saveTasks(name, content){
-  localStorage.setItem(name, JSON.stringify(content) );
+// using localStorage to store tasks
+function saveTasks(name, content) {
+  localStorage.setItem(name, JSON.stringify(content));
 }
 
-
-function loadTasks(name){
-  try{
+function loadTasks(name) {
+  try {
     return JSON.parse(localStorage.getItem(name)) || [];
-  }catch{
+  } catch {
     return [];
   }
-  
 }
 
 // onClick button to scrool to tasks section
-function scrollToSection(){
+function scrollToSection() {
   const section = document.getElementById("task-section");
 
-  section.scrollIntoView({behavior: "smooth"});
+  section.scrollIntoView({ behavior: "smooth" });
 }
