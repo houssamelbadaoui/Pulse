@@ -2,9 +2,13 @@
 const button = document.querySelector(".submit");
 // select tasks container
 const container = document.querySelector(".task-container");
+// completed tasks container 
+const completedContainer = document.querySelector(".completed-container");
 
 // array for tasks
 let tasks = [];
+// array for completed tasks
+let completedTasks = [];
 
 button.addEventListener("click", (e) => {
   e.preventDefault();
@@ -21,31 +25,7 @@ button.addEventListener("click", (e) => {
 
   document.getElementById("form").reset();
 });
-// function that update the UI
-function updateUI() {
-  sortTasks(tasks);
-  container.innerHTML = "";
-  let card;
-  tasks.forEach((task) => {
-    // create a div
-    card = document.createElement("div");
 
-    card.classList.add("task-card"); // give it a class
-    card.dataset.id = task.id;
-
-    card.innerHTML = `
-    <h3 class="task-header">${task.title}</h3>
-    <p class="category">${task.category}</p>
-    <p class="priority">${task.priority}</p>
-    <p class="duration">${task.duration}</p>
-    <div class="check-group">
-    <input type="checkbox" id="completed" name="completed" value="comleted">
-    <label for="completed" > Completed </label>
-    </div>
-    `;
-    container.appendChild(card);
-  });
-}
 
 // function to sort the list of tasks
 function sortTasks(tasks) {
@@ -61,12 +41,56 @@ function sortTasks(tasks) {
 }
 // mark a task as completed
 container.addEventListener("change", (e) => {
-  const taskId = e.target.closest(".task-card").dataset.id; // get task id
+  const taskId = Number(e.target.closest(".task-card").dataset.id); // get task id
 
   const task = tasks.find((t) => t.id == taskId); // task
 
-  task.completed = e.target.checked;
+  task.completed = true;
+
+  tasks =  tasks.filter(task => task.id !== taskId); // remove the completed task
+  
+  updateUI(); // print tasks
+
+  completedTasks.push(task) // add to the container of completed tasks 
+
+
+ insertToContainer(completedTasks, completedContainer);
+ 
 });
+
+// function that update the UI
+function updateUI() {
+  sortTasks(tasks);
+  insertToContainer(tasks, container);
+  
+}
+/**
+ * function that take a list of tasks and a container 
+ * and insert each task to the container
+ */
+function insertToContainer(tasks, container){
+container.innerHTML = "";
+  let card;
+  tasks.forEach((task) => {
+    // create a div
+    card = document.createElement("div");
+
+    card.classList.add("task-card"); // give it a class
+    card.dataset.id = task.id;
+
+    card.innerHTML = `
+    <h3 class="task-header">${task.title}</h3>
+    <p class="category">${task.category}</p>
+    <p class="priority">${task.priority}</p>
+    <p class="duration">${task.duration}</p>
+    <div class="check-group">
+    <input type="checkbox" id="completed-${task.id}" name="completed" value="completed" ${task.completed ? "checked" : ""}>
+    <label for="completed-${task.id}" > Completed </label>
+    </div>
+    `;
+    container.appendChild(card);
+  });
+}
 // create a class for task
 class Task {
   constructor(title, category, priority, duration) {

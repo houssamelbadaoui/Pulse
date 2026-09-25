@@ -117,3 +117,23 @@ input {
   border-radius: 10px;
   font-weight: 600;
 }
+
+.task-container, .completed-container {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  margin-top: 2rem;
+}
+
+.task-card{
+  background: beige;
+  padding: 2rem;
+  border-radius: 8px;
+}
+
+.tasks-header{
+  color: var(--secondary);
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
