@@ -21,7 +21,7 @@ button.addEventListener("click", (e) => {
   const task = new Task(title, category, priority, duration); // create a new task
   tasks.push(task);
 
-  updateUI();
+  updateUI(tasks, container);
 
   document.getElementById("form").reset();
 });
@@ -49,7 +49,7 @@ container.addEventListener("change", (e) => {
 
   tasks =  tasks.filter(task => task.id !== taskId); // remove the completed task
   
-  updateUI(); // print tasks
+  updateUI(tasks, container); // print tasks
 
   completedTasks.push(task) // add to the container of completed tasks 
 
@@ -58,8 +58,24 @@ container.addEventListener("change", (e) => {
  
 });
 
+// uncheck a completed task 
+completedContainer.addEventListener("change", (e) => {
+  const taskId = Number(e.target.closest(".task-card").dataset.id);
+
+  const task = completedTasks.find(t => t.id === taskId);
+
+  task.completed = false;
+
+  completedTasks = completedTasks.filter(task => task.id !== taskId);
+  updateUI(completedTasks, completedContainer);
+
+  tasks.push(task);
+  updateUI(tasks, container);
+
+})
+
 // function that update the UI
-function updateUI() {
+function updateUI(tasks, container) {
   sortTasks(tasks);
   insertToContainer(tasks, container);
   
