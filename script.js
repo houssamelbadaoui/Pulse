@@ -1,3 +1,4 @@
+
 // select button
 const button = document.querySelector(".submit");
 // select tasks container
@@ -7,11 +8,21 @@ const completedContainer = document.querySelector(".completed-container");
 
 // array for tasks
 let tasks = [];
+
+
+// load tasks 
+tasks = loadTasks("tasks");
+updateUI(tasks, container);
+
 // array for completed tasks
 let completedTasks = [];
 
+completedTasks = loadTasks("completed");
+updateUI(completedTasks, completedContainer);
+
 button.addEventListener("click", (e) => {
   e.preventDefault();
+  
   // take values from input
   const title = document.getElementById("title").value;
   const category = document.getElementById("category").value;
@@ -20,6 +31,8 @@ button.addEventListener("click", (e) => {
 
   const task = new Task(title, category, priority, duration); // create a new task
   tasks.push(task);
+saveTasks("tasks", tasks);
+  
 
   updateUI(tasks, container);
 
@@ -48,10 +61,11 @@ container.addEventListener("change", (e) => {
   task.completed = true;
 
   tasks =  tasks.filter(task => task.id !== taskId); // remove the completed task
-  
+  saveTasks("tasks", tasks);
   updateUI(tasks, container); // print tasks
 
   completedTasks.push(task) // add to the container of completed tasks 
+  saveTasks("completed", completedTasks);
 
 
  insertToContainer(completedTasks, completedContainer);
@@ -68,8 +82,11 @@ completedContainer.addEventListener("change", (e) => {
 
   completedTasks = completedTasks.filter(task => task.id !== taskId);
   updateUI(completedTasks, completedContainer);
+  saveTasks("completed", completedTasks);
+
 
   tasks.push(task);
+  saveTasks("tasks", tasks);
   updateUI(tasks, container);
 
 })
@@ -117,4 +134,19 @@ class Task {
     this.duration = duration;
     this.completed = false;
   }
+}
+
+// using localStorage to store tasks 
+function saveTasks(name, content){
+  localStorage.setItem(name, JSON.stringify(content) );
+}
+
+
+function loadTasks(name){
+  try{
+    return JSON.parse(localStorage.getItem(name)) || [];
+  }catch{
+    return [];
+  }
+  
 }
