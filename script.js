@@ -1,7 +1,7 @@
 // select button
 const button = document.querySelector(".submit");
 // select tasks container
-const container = document.querySelector(".container");
+const container = document.querySelector(".task-container");
 
 // array for tasks
 let tasks = [];

@@ -68,7 +68,7 @@ main {
   display: flex;
   justify-content: space-between;
   padding: 4rem 3rem;
-  height: 100vh;
+  height: 80vh;
 }
 
 .left {
@@ -95,7 +95,7 @@ main {
   justify-content: space-between;
 }
 
-label {
+.form-group label {
   font-size: 18px;
   font-weight: 600;
 }
