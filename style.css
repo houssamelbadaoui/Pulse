@@ -118,22 +118,35 @@ input {
   font-weight: 600;
 }
 
-.task-container, .completed-container {
+.task-container,
+.completed-container {
   display: flex;
   gap: 1rem;
   margin-bottom: 2rem;
   margin-top: 2rem;
 }
 
-.task-card{
+.task-card {
+  position: relative;
   background: beige;
   padding: 2rem;
   border-radius: 8px;
 }
 
-.tasks-header{
+.tasks-header {
   color: var(--secondary);
   margin-top: 1rem;
   margin-bottom: 1rem;
   text-align: center;
+}
+
+.delete-task {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  border: none;
+  background: transparent;
+  color: #e11d48;
+  cursor: pointer;
+  font-size: 18px;
 }

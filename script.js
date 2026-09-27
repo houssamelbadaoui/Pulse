@@ -5,6 +5,8 @@ const container = document.querySelector(".task-container");
 // completed tasks container
 const completedContainer = document.querySelector(".completed-container");
 
+const taskSection = document.querySelector("#task-section");
+
 // array for tasks
 let tasks = [];
 
@@ -105,6 +107,7 @@ function insertToContainer(tasks, container) {
 
     card.innerHTML = `
     <h3 class="task-header">${task.title}</h3>
+    <button class="delete-task" id="delete">X</button>
     <p class="category">${task.category}</p>
     <p class="priority">${task.priority}</p>
     <p class="duration">${task.duration}</p>
@@ -116,6 +119,21 @@ function insertToContainer(tasks, container) {
     container.appendChild(card);
   });
 }
+
+// delete a task
+taskSection.addEventListener("click", (e) => {
+  const taskId = Number(e.target.closest(".task-card").dataset.id);
+
+  tasks = tasks.filter((task) => task.id !== taskId);
+  saveTasks("tasks", tasks);
+
+  // update both completed and ongoing tasks
+  onGoingTasks = tasks.filter((task) => task.completed === false);
+  updateUI(onGoingTasks, container);
+
+  completedTasks = tasks.filter((task) => task.completed === true);
+  updateUI(completedTasks, completedContainer);
+});
 // create a class for task
 class Task {
   constructor(title, category, priority, duration) {
