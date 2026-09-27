@@ -10,12 +10,14 @@ let tasks = [];
 
 // load tasks
 tasks = loadTasks("tasks");
-updateUI(tasks, container);
+
+// array for ongoing tasks
+let onGoingTasks = tasks.filter((task) => task.completed === false);
+updateUI(onGoingTasks, container);
 
 // array for completed tasks
-let completedTasks = [];
+let completedTasks = tasks.filter((task) => task.completed === true);
 
-completedTasks = loadTasks("completed");
 updateUI(completedTasks, completedContainer);
 
 form.addEventListener("submit", (e) => {
@@ -29,9 +31,10 @@ form.addEventListener("submit", (e) => {
 
   const task = new Task(title, category, priority, duration); // create a new task
   tasks.push(task);
+  onGoingTasks.push(task);
   saveTasks("tasks", tasks);
 
-  updateUI(tasks, container);
+  updateUI(onGoingTasks, container);
 
   document.getElementById("form").reset();
 });
@@ -52,16 +55,15 @@ function sortTasks(tasks) {
 container.addEventListener("change", (e) => {
   const taskId = Number(e.target.closest(".task-card").dataset.id); // get task id
 
-  const task = tasks.find((t) => t.id == taskId); // task
+  const task = onGoingTasks.find((t) => t.id == taskId); // task
 
   task.completed = true;
 
-  tasks = tasks.filter((task) => task.id !== taskId); // remove the completed task
-  saveTasks("tasks", tasks);
-  updateUI(tasks, container); // print tasks
+  onGoingTasks = onGoingTasks.filter((task) => task.id !== taskId); // remove the completed task
+
+  updateUI(onGoingTasks, container); // print tasks
 
   completedTasks.push(task); // add to the container of completed tasks
-  saveTasks("completed", completedTasks);
 
   insertToContainer(completedTasks, completedContainer);
 });
@@ -76,11 +78,10 @@ completedContainer.addEventListener("change", (e) => {
 
   completedTasks = completedTasks.filter((task) => task.id !== taskId);
   updateUI(completedTasks, completedContainer);
-  saveTasks("completed", completedTasks);
 
-  tasks.push(task);
-  saveTasks("tasks", tasks);
-  updateUI(tasks, container);
+  onGoingTasks.push(task);
+
+  updateUI(onGoingTasks, container);
 });
 
 // function that update the UI
