@@ -119,7 +119,7 @@ function insertToContainer(tasks, container) {
 // create a class for task
 class Task {
   constructor(title, category, priority, duration) {
-    this.id = Date.now();
+    this.id = crypto.randomUUID();
     this.title = title;
     this.category = category;
     this.priority = priority;
